@@ -746,7 +746,6 @@ Scene_Item.prototype.createPartyData = function() {
 		this.addChild(this._partyWindow[i]);
 	};
 	this.createPartyArrow();
-	this.createAllMembersScope();
 };
 
 //==============================
@@ -810,7 +809,6 @@ Scene_Item.prototype.updatePartyWindow = function() {
 		 this._partyWindow[i].y = this.commandMoveTo(this._partyWindow[i].y,ny,20);
 	 };
 	 this.updatePartyArrow();
-     this.updateAllMembersSprite();
 };
 
 //==============================
@@ -885,26 +883,6 @@ Scene_Item.prototype.createPartyArrow = function() {
 		this._partyArrow[i].opacity = 0;
 		this.addChild(this._partyArrow[i]);
 	};	
-};
-
-//==============================
-// * create All Members Scope
-//==============================
-Scene_Item.prototype.createAllMembersScope = function() {
-     this._almSprite = new Sprite(ImageManager.loadMenusActor("AllMembers"));
-	 this._almSprite.anchor.x = 0.5;
-	 this._almSprite.anchor.y = 0.5;
-	 this._almSprite.visible = false;
-     this.addChild(this._almSprite);
-};
-
-//==============================
-// * updateAllMembers Sprite
-//==============================
-Scene_Item.prototype.updateAllMembersSprite = function() {
-	 this._almSprite.x = this._partyPos[0][0] + (this._partyWindow[0].width / 2);
-	 this._almSprite.y = this._partyPos[0][1] + (this._partyWindow[0].height / 2);
-	 this._almSprite.visible = this._actorWindow._cursorAll;
 };
 
 //==============================
@@ -1195,20 +1173,37 @@ ActorDataWindow.prototype.createParameters = function() {
 // * refresh Parameters
 //==============================
 ActorDataWindow.prototype.refreshParameters = function() {
-     this._par.bitmap.clear();
-	 this._par.bitmap.drawText(this._actor.hp,-60,66,160,32,"right");
-	 this._par.bitmap.drawText(this._actor.mhp,30,66,160,32,"right");
-	 this._par.bitmap.drawText(this._actor.mp,-60,99,160,32,"right");
-	 this._par.bitmap.drawText(this._actor.mmp,30,99,160,32,"right");	 
-	 this._par.bitmap.drawText(this._actor.atk,-60,132,160,32,"right"); 
-	 this._par.bitmap.drawText(this._actor.def,30,132,160,32,"right"); 
-	 this._par.bitmap.drawText(this._actor.mat,-60,165,160,32,"right"); 
-	 this._par.bitmap.drawText(this._actor.mdf,30,165,160,32,"right");
-	 this._par.bitmap.drawText(this._actor.agi,-60,198,160,32,"right"); 
-	 this._par.bitmap.drawText(this._actor.luk,30,198,160,32,"right");	
-	 this._par.bitmap.drawText(this._actor.name(),70,30,160,32,"left");	 
-};
+    this._par.bitmap.clear();
 
+    // Nombres de las estadísticas
+    var paramNames = ["PV", "PV MAX", "E", "E MAX", "ATK", "DEF", "MAT", "MDF", "AGI", "SU"];
+
+// Coordenadas para los nombres de las estadísticas
+var nameX = 10; // Ajusta esta coordenada para posicionar correctamente los nombres
+var nameY = [66, 99, 132, 165, 198, 231, 264, 297, 330, 363];
+
+// Valores de las estadísticas
+var paramValues = [
+	this._actor.hp, this._actor.mhp,
+	this._actor.mp, this._actor.mmp,
+	this._actor.atk, this._actor.def,
+	this._actor.mat, this._actor.mdf,
+	this._actor.agi, this._actor.luk
+];
+
+// Coordenadas para los valores de las estadísticas
+var valueX = 100;
+var valueY = nameY; // Usamos las mismas coordenadas y para simplificar
+
+// Dibujar nombres y valores de las estadísticas
+for (var i = 0; i < paramNames.length; i++) {
+	this._par.bitmap.drawText(paramNames[i], nameX, nameY[i], 100, 32, "left");
+	this._par.bitmap.drawText(paramValues[i], valueX, valueY[i], 160, 32, "right");
+}
+
+// Dibujar el nombre del actor
+this._par.bitmap.drawText(this._actor.name(), 70, 30, 160, 32, "left");
+};
 //==============================
 // * Create States
 //==============================
@@ -1263,17 +1258,29 @@ ActorDataWindow.prototype.need_refresh_states = function() {
 // * create Faces
 //==============================
 ActorDataWindow.prototype.createFaces = function() {
-     this._faces = new Sprite();
-	 this._faces.x = Moghunter.scItem_ActorFaceX;
-	 this._faces.y = Moghunter.scItem_ActorFaceY;
-	 this.addChild(this._faces);
+    this._faces = new Sprite();
+    this._faces.x = Moghunter.scItem_ActorFaceX;
+    this._faces.y = Moghunter.scItem_ActorFaceY;
+    this._faces.scale.x = 0.5; // Escala 50%
+    this._faces.scale.y = 0.5; // Escala 50%
+    this.addChild(this._faces);
 };
 
 //==============================
 // * refresh Faces
 //==============================
 ActorDataWindow.prototype.refreshFaces = function() {
-     this._faces.bitmap = ImageManager.loadMenusFaces1("Actor_" + this._actor._actorId)
+    var faceName = this._actor.faceName();
+    var faceIndex = this._actor.faceIndex();
+    
+    this._faces.bitmap = ImageManager.loadFace(faceName);
+
+    var pw = Window_Base._faceWidth;
+    var ph = Window_Base._faceHeight;
+    var sx = faceIndex % 4 * pw;
+    var sy = Math.floor(faceIndex / 4) * ph;
+
+    this._faces.setFrame(sx, sy, pw, ph);
 };
 
 //==============================

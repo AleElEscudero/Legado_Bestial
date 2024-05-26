@@ -710,7 +710,6 @@ Scene_Skill.prototype.createPartyData = function() {
 		this.addChild(this._partyWindow[i]);
 	};
 	this.createPartyArrow();
-	this.createAllMembersScope();
 };
 
 //==============================
@@ -792,7 +791,6 @@ Scene_Skill.prototype.updatePartyWindow = function() {
 		 this._partyWindow[i].y = this.commandMoveTo(this._partyWindow[i].y,ny,20);
 	 };
 	 this.updatePartyArrow();
-     this.updateAllMembersSprite();
 };
 
 //==============================
@@ -867,26 +865,6 @@ Scene_Skill.prototype.createPartyArrow = function() {
 		this._partyArrow[i].opacity = 0;
 		this.addChild(this._partyArrow[i]);
 	};	
-};
-
-//==============================
-// * create All Members Scope
-//==============================
-Scene_Skill.prototype.createAllMembersScope = function() {
-     this._almSprite = new Sprite(ImageManager.loadMenusActor("AllMembers"));
-	 this._almSprite.anchor.x = 0.5;
-	 this._almSprite.anchor.y = 0.5;
-	 this._almSprite.visible = false;
-     this.addChild(this._almSprite);
-};
-
-//==============================
-// * updateAllMembers Sprite
-//==============================
-Scene_Skill.prototype.updateAllMembersSprite = function() {
-	 this._almSprite.x = this._partyPos[0][0] + (this._partyWindow[0].width / 2);
-	 this._almSprite.y = this._partyPos[0][1] + (this._partyWindow[0].height / 2);
-	 this._almSprite.visible = this._actorWindow._cursorAll;
 };
 
 //==============================
@@ -1173,20 +1151,32 @@ ActorStatusSkill.prototype.refresh = function() {
 };
 
 //==============================
-// * Refresh Face
+// * create Faces
 //==============================
-ActorStatusSkill.prototype.refreshFace = function() {
-     this._face.bitmap = ImageManager.loadMenusFaces2("Actor_" + this._actor._actorId);
+ActorStatusSkill.prototype.createFace = function() {
+    this._faces = new Sprite();
+    this._faces.x = Moghunter.scItem_ActorFaceX - 80;
+    this._faces.y = Moghunter.scItem_ActorFaceY + 70;
+    this._faces.scale.x = 0.5; // Escala 50%
+    this._faces.scale.y = 0.5; // Escala 50%
+    this.addChild(this._faces);
 };
 
 //==============================
-// * create Face
+// * refresh Faces
 //==============================
-ActorStatusSkill.prototype.createFace = function() {
-     this._face = new Sprite();
-	 this._face.x = Moghunter.scSkill_AS_FaceX;
-	 this._face.y = Moghunter.scSkill_AS_FaceY;
-	 this.addChild(this._face);
+ActorStatusSkill.prototype.refreshFace = function() {
+    var faceName = this._actor.faceName();
+    var faceIndex = this._actor.faceIndex();
+    
+    this._faces.bitmap = ImageManager.loadFace(faceName);
+
+    var pw = Window_Base._faceWidth;
+    var ph = Window_Base._faceHeight;
+    var sx = faceIndex % 4 * pw;
+    var sy = Math.floor(faceIndex / 4) * ph;
+
+    this._faces.setFrame(sx, sy, pw, ph);
 };
 
 //==============================

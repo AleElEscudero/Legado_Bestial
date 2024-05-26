@@ -251,35 +251,7 @@
 ImageManager.loadMenusMain = function(filename) {
     return this.loadBitmap('img/menus/main/', filename, 0, true);
 };
-	
-//==============================
-// * Main Faces1
-//==============================
-ImageManager.loadMenusFaces1 = function(filename) {
-    return this.loadBitmap('img/menus/faces/faces1/', filename, 0, true);
-};	
 
-//==============================
-// * Main Faces2
-//==============================
-ImageManager.loadMenusFaces2 = function(filename) {
-    return this.loadBitmap('img/menus/faces/faces2/', filename, 0, true);
-};			
-	
-//==============================
-// * Main Faces3
-//==============================
-ImageManager.loadMenusFaces3 = function(filename) {
-    return this.loadBitmap('img/menus/faces/faces3/', filename, 0, true);
-};			
-	
-//==============================
-// * Main Faces4
-//==============================
-ImageManager.loadMenusFaces4 = function(filename) {
-    return this.loadBitmap('img/menus/faces/faces4/', filename, 0, true);
-};	
-	
 //==============================
 // * Main Commands
 //==============================
@@ -302,10 +274,12 @@ Scene_Menu.prototype.create = function() {
 // * loadBitmapsMain
 //==============================	
 Scene_Menu.prototype.loadBitmapsMain = function() {
-	this._facesBitmaps = []
-	for (var i = 0; i < $gameParty.members().length; i++) {
-		 this._facesBitmaps[i] = ImageManager.loadMenusFaces2("Actor_" + $gameParty.members()[i]._actorId);
-	};
+    this._facesBitmaps = [];
+    for (var i = 0; i < $gameParty.members().length; i++) {
+        var actor = $gameParty.members()[i];
+        // Cargar la imagen de la cara y almacenarla en _facesBitmaps
+        this._facesBitmaps[i] = ImageManager.loadFace(actor.faceName());
+    };
 	this._comBitmaps = []
 	this._comList = this._commandWindow._list;
     for (var i = 0; i < this._comList.length; i++) {
@@ -368,19 +342,44 @@ Scene_Menu.prototype.createGold = function() {
 // * create Magic Circle
 //==============================
 Scene_Menu.prototype.createMagicCircle = function() {
-     this._magicCircle = new Sprite(ImageManager.loadMenusMain("MagicCircle"));
-	 this._magicCircle.anchor.x = 0.5;
-	 this._magicCircle.anchor.y = 0.5;
-	 this._magicCircle.x = Moghunter.scMenu_MagicCircleX;
-	 this._magicCircle.y = Moghunter.scMenu_MagicCircleY;
-	 this._field.addChild(this._magicCircle);
-};
+    this._magicCircleDay = new Sprite(ImageManager.loadMenusMain("Sol"));
+    this._magicCircleDay.anchor.x = 0.5;
+    this._magicCircleDay.anchor.y = 0.5;
+    this._magicCircleDay.x = Moghunter.scMenu_MagicCircleX;
+    this._magicCircleDay.y = Moghunter.scMenu_MagicCircleY;
+    this._field.addChild(this._magicCircleDay);
 
+    this._magicCircleNight = new Sprite(ImageManager.loadMenusMain("Luna"));
+    this._magicCircleNight.anchor.x = 0.5;
+    this._magicCircleNight.anchor.y = 0.5;
+    this._magicCircleNight.x = Moghunter.scMenu_MagicCircleX;
+    this._magicCircleNight.y = Moghunter.scMenu_MagicCircleY;
+    this._field.addChild(this._magicCircleNight);
+	
+    this.updateMagicCircleVisibility();
+};
+//==============================
+// * Visibilidad sol-luna Magic Circle
+//==============================
+Scene_Menu.prototype.updateMagicCircleVisibility = function() {
+    const currentHour = $gameVariables.value(10);
+
+    const isDay = currentHour >= 6 && currentHour < 18;
+    const isNight = currentHour >= 18 || currentHour < 6;
+
+    this._magicCircleDay.visible = isDay;
+    this._magicCircleNight.visible = isNight;
+};
 //==============================
 // * create Magic Circle
 //==============================
 Scene_Menu.prototype.updateMagicCircle = function() {
-     this._magicCircle.rotation +=Moghunter.scMenu_MagicCircleR;
+    if (this._magicCircleDay.visible) {
+        this._magicCircleDay.rotation += Moghunter.scMenu_MagicCircleR;
+    }
+    if (this._magicCircleNight.visible) {
+        this._magicCircleNight.rotation += Moghunter.scMenu_MagicCircleR;
+    }
 };
 
 //==============================
@@ -666,99 +665,133 @@ Scene_Menu.prototype.refreshActorName = function() {
 //==============================
 Scene_Menu.prototype.createSelection = function() {
     this._selection = [];
-	this._selectionPos = [];
-	this._selzoom = [];
-	this._selMax = Math.min(Math.max(Moghunter.scMenu_maxVisibleFaces,2),999);
-	this._selField = new Sprite();
-	this._field.addChild(this._selField);	
-	this._selField.opacity = 0;
-	this._selField.x = 50;
-	for (var i = 0; i < $gameParty.members().length; i++) {
-		 this._selection[i] = new Sprite(this._facesBitmaps[i]);
-		 this._selectionPos[i] = [Moghunter.scMenu_FaceSelX + ((4 + this._facesBitmaps[i].width) * i),Moghunter.scMenu_FaceSelY];
-		 this._selection[i].anchor.x = 0.5;
-		 this._selection[i].anchor.y = 0.5;
-		 this._selection[i].opacity = 160;
-		 this._selection[i].vsb = false;
-		 this._selection[i].x = this._selectionPos[i][0];
-		 this._selection[i].y = this._selectionPos[i][1];
-		 this._selField .addChild(this._selection[i]);
-	};
-};	
+    this._selectionPos = [];
+    this._selzoom = [];
+    this._selMax = Math.min(Math.max(Moghunter.scMenu_maxVisibleFaces, 2), 999);
+    this._selField = new Sprite();
+    this._field.addChild(this._selField);
+    this._selField.opacity = 0;
+    this._selField.x = 50;
+
+    for (var i = 0; i < $gameParty.members().length; i++) {
+        // Carga la cara del actor en su posición correspondiente
+        var actor = $gameParty.members()[i];
+        var faceName = actor.faceName();
+        var faceIndex = actor.faceIndex();
+
+        var faceSprite = new Sprite();
+        faceSprite.bitmap = ImageManager.loadFace(faceName);
+        var pw = Window_Base._faceWidth;
+        var ph = Window_Base._faceHeight;
+        var sw = Math.min(pw, faceSprite.bitmap.width - faceIndex % 4 * pw);
+        var sh = Math.min(ph, faceSprite.bitmap.height - Math.floor(faceIndex / 4) * ph);
+        faceSprite.setFrame(faceIndex % 4 * pw, Math.floor(faceIndex / 4) * ph, sw, sh);
+
+        this._selection.push(faceSprite);
+        // Reduce el espacio entre las caras ajustando el valor multiplicado por `i`
+        this._selectionPos[i] = [
+            Moghunter.scMenu_FaceSelX + ((4 + pw / 1.5) * i),  // Ajusta el valor para reducir la distancia
+            Moghunter.scMenu_FaceSelY
+        ];
+        faceSprite.anchor.x = 0.5;
+        faceSprite.anchor.y = 0.5;
+        faceSprite.opacity = 160;
+        faceSprite.vsb = false;
+        faceSprite.x = this._selectionPos[i][0];
+        faceSprite.y = this._selectionPos[i][1];
+        faceSprite.scale.x = 0.5; // Ajusta la escala de la cara
+        faceSprite.scale.y = 0.5; // Ajusta la escala de la cara
+        this._selField.addChild(faceSprite);
+    }
+};
 	
 //==============================
 // * update Selection
 //==============================
 Scene_Menu.prototype.updateSelection = function() {
-	if (this._statusWindow.active) {
-		this._selField.opacity += 15;
-		if (this._selField.x > 0) {this._selField.x -= 4
-		    if (this._selField.x < 0) {this._selField.x = 0};
-		};
-	} else {
-		if (this._selField.x < 50) {this._selField.x += 4
-		    if (this._selField.x > 50) {this._selField.x = 50};
-		};		
-		this._selField.opacity -= 15;
-	}
-	for (var i = 0; i < this._selection.length; i++) {
-		 if (this._statusWindow._index < this._selMax) {
-		     var nindex = 0
-			 if (i > this._selMax) {
-				 this._selection[i].vsb = false;
-			 } else {
-				 this._selection[i].vsb = true;
-			 };
-		 } else {
-			 var ni = this._statusWindow._index - this._selMax
-			 var nindex = ((4 + this._facesBitmaps[i].width) * (ni));
-			 if (i < ni || i > ni + this._selMax) {
-				 this._selection[i].vsb = false;
-			 } else {this._selection[i].vsb = true;
-			 }
-		 };
-		 if (i === this._statusWindow._index) {
-			 this._selection[i].opacity += 15;
-			 if (this._selzoom[i] === 0) {
-				 this._selection[i].scale.x += 0.015;
-				 if (this._selection[i].scale.x > 1.30) {
-					 this._selection[i].scale.x = 1.30;
-				     this._selzoom[i] = 1;
-				 };
-			 } else {
-				 this._selection[i].scale.x -= 0.015;
-				 if (this._selection[i].scale.x < 1.00) {
-					 this._selection[i].scale.x = 1.00;
-				     this._selzoom[i] = 0;
-				 };				 
-			 };
-		 } else {
-			if (!this._selection[i].vsb) { 
-			   this._selection[i].opacity -= 15;
-			} else if (this._selection[i].vsb) { 
-			   if (this._selection[i].opacity < 160) {this._selection[i].opacity += 15;
-			       if (this._selection[i].opacity > 160) {this._selection[i].opacity = 160};
-			   };
-			   if (this._selection[i].opacity > 160) {this._selection[i].opacity -= 15;
-			       if (this._selection[i].opacity < 160) {this._selection[i].opacity = 160};
-			   };			   
-		    } else {
-				if (this._selection[i].opacity > 160) {this._selection[i].opacity -= 10
-				if (this._selection[i].opacity < 160) {this._selection[i].opacity = 160};
-				};
-		    };
-			this._selzoom[i] = 0;
-			this._selection[i].scale.x -= 0.01;
-			if (this._selection[i].scale.x < 1.00) {this._selection[i].scale.x = 1.00}			         
-		 }
-         var nx = this._selectionPos[i][0] - nindex;
-         var ny = this._selectionPos[i][1];
-		 this._selection[i].x = this.commandMoveTo(this._selection[i].x,nx);
-		 this._selection[i].y = this.commandMoveTo(this._selection[i].y,ny); 		  
-		 this._selection[i].scale.y = this._selection[i].scale.x;
-	};
-	this.updateArrow();
-};	
+    if (this._statusWindow.active) {
+        this._selField.opacity += 15;
+        if (this._selField.x > 0) {
+            this._selField.x -= 2; // Disminuye la velocidad de movimiento
+            if (this._selField.x < 0) {
+                this._selField.x = 0;
+            }
+        }
+    } else {
+        if (this._selField.x < 50) {
+            this._selField.x += 2; // Disminuye la velocidad de movimiento
+            if (this._selField.x > 50) {
+                this._selField.x = 50;
+            }
+        }
+        this._selField.opacity -= 15;
+    }
+
+    for (var i = 0; i < this._selection.length; i++) {
+        if (this._statusWindow._index < this._selMax) {
+            var nindex = 0;
+            if (i > this._selMax) {
+                this._selection[i].vsb = false;
+            } else {
+                this._selection[i].vsb = true;
+            }
+        } else {
+            var ni = this._statusWindow._index - this._selMax;
+            var nindex = ((2 + this._facesBitmaps[i].width / 2) * (ni)); // Ajusta el cálculo del índice
+            if (i < ni || i > ni + this._selMax) {
+                this._selection[i].vsb = false;
+            } else {
+                this._selection[i].vsb = true;
+            }
+        }
+
+        if (i === this._statusWindow._index) {
+            this._selection[i].opacity += 15;
+            if (this._selzoom[i] === 0) {
+                this._selection[i].scale.x += 0.01; // Ajusta la velocidad de zoom
+                if (this._selection[i].scale.x > 0.65) { // Cambia el límite de escala
+                    this._selection[i].scale.x = 0.65;
+                    this._selzoom[i] = 1;
+                }
+            } else {
+                this._selection[i].scale.x -= 0.01; // Ajusta la velocidad de zoom
+                if (this._selection[i].scale.x < 0.5) { // Cambia el límite de escala
+                    this._selection[i].scale.x = 0.5;
+                    this._selzoom[i] = 0;
+                }
+            }
+        } else {
+            if (!this._selection[i].vsb) {
+                this._selection[i].opacity -= 15;
+            } else {
+                if (this._selection[i].opacity < 160) {
+                    this._selection[i].opacity += 15;
+                    if (this._selection[i].opacity > 160) {
+                        this._selection[i].opacity = 160;
+                    }
+                }
+                if (this._selection[i].opacity > 160) {
+                    this._selection[i].opacity -= 15;
+                    if (this._selection[i].opacity < 160) {
+                        this._selection[i].opacity = 160;
+                    }
+                }
+            }
+            this._selzoom[i] = 0;
+            this._selection[i].scale.x -= 0.005; // Disminuye la velocidad de zoom
+            if (this._selection[i].scale.x < 0.5) {
+                this._selection[i].scale.x = 0.5;
+            }
+        }
+
+        var nx = this._selectionPos[i][0] - nindex;
+        var ny = this._selectionPos[i][1];
+        this._selection[i].x = this.commandMoveTo(this._selection[i].x, nx);
+        this._selection[i].y = this.commandMoveTo(this._selection[i].y, ny);
+        this._selection[i].scale.y = this._selection[i].scale.x;
+    }
+    this.updateArrow();
+};
 	
 //==============================
 // * create Face Arrow
@@ -897,17 +930,20 @@ Scene_Menu.prototype.setTouchCommand = function(index) {
 // * on Sprite
 //==============================
 Scene_Menu.prototype.isOnSprite = function(sprite) {
-	 var cw = sprite.bitmap.width / 2;
-	 var ch = sprite.bitmap.height / 2;
-	 if (sprite.visible === false) {return false};
-	 if (sprite.opacity === 0) {return false};
-	 if (TouchInput.x < sprite.x - cw) {return false};
-	 if (TouchInput.x > sprite.x + cw) {return false};
-	 if (TouchInput.y < sprite.y - ch) {return false};
-	 if (TouchInput.y > sprite.y + ch) {return false};
-	 return true;	
-};
+    var scale = sprite.scale.x; // Asumiendo que la escala es uniforme en x e y
+    var frameWidth = sprite._frame.width;
+    var frameHeight = sprite._frame.height;
+    var cw = (frameWidth / 2) * scale;
+    var ch = (frameHeight / 2) * scale;
 
+    if (sprite.visible === false) {return false};
+    if (sprite.opacity === 0) {return false};
+    if (TouchInput.x < sprite.x - cw) {return false};
+    if (TouchInput.x > sprite.x + cw) {return false};
+    if (TouchInput.y < sprite.y - ch) {return false};
+    if (TouchInput.y > sprite.y + ch) {return false};
+    return true;
+};
 //==============================
 // * update Touch Screen
 //==============================
@@ -935,7 +971,10 @@ Scene_Menu.prototype.update = function() {
 	if (!this._selection && this._facesBitmaps && this._facesBitmaps[0].isReady()) {this.createAfter()};
 	if (this._selection) {this.updateSelection()};
 	if (this._playTime) {this.updateTime()};
-	if (this._magicCircle) {this.updateMagicCircle()};
+	if (this._magicCircleDay && this._magicCircleNight) {
+		this.updateMagicCircleVisibility();
+		this.updateMagicCircle();
+	};
 	this.updateWindowStatus();
 	this.updateTouchScreen();
 };
@@ -973,17 +1012,37 @@ MBustMenu.prototype.posX = function() {
 // * create Characters
 //==============================
 MBustMenu.prototype.createCharaters = function() {
-     this._char = new Sprite(ImageManager.loadMenusFaces3("actor_" + this._actor._actorId));
-	 this._char.anchor.x = 0.5;
-	 this._char.anchor.y = 1.0;
-	 this._char.x = this.posX() + Moghunter.scMenu_CharX;
-	 this._char.y = Graphics.boxHeight + Moghunter.scMenu_CharY;
-	 this._orgX  = this._char.x;
-	 this._char.x -= 50;
-	 this._wait = 5 + 10 * this._index;
-	 this._char.opacity = 0;
-	 this.addChild(this._char);
-};	
+    // Obtén el nombre del archivo de la cara y el índice desde el actor
+    var faceName = this._actor.faceName();
+    var faceIndex = this._actor.faceIndex();
+
+    // Crea un sprite para la cara del actor usando el método estándar
+    this._char = new Sprite(new Bitmap(144, 144)); // Tamaño estándar de la cara es 144x144
+    this._char.bitmap = ImageManager.loadFace(faceName);
+
+    // Calcula la posición en el bitmap de la cara
+    var pw = Window_Base._faceWidth;
+    var ph = Window_Base._faceHeight;
+    var sx = faceIndex % 4 * pw;
+    var sy = Math.floor(faceIndex / 4) * ph;
+
+    // Extrae la cara desde el bitmap cargado
+    this._char.bitmap.addLoadListener(function() {
+        var bitmap = new Bitmap(pw, ph);
+        bitmap.blt(this._char.bitmap, sx, sy, pw, ph, 0, 0);
+        this._char.bitmap = bitmap;
+    }.bind(this));
+
+    this._char.anchor.x = 0.5;
+    this._char.anchor.y = 1.0;
+    this._char.x = this.posX() + Moghunter.scMenu_CharX;
+    this._char.y = Graphics.boxHeight + Moghunter.scMenu_CharY- 300;
+    this._orgX  = this._char.x;
+    this._char.x -= 50;
+    this._wait = 5 + 10 * this._index;
+    this._char.opacity = 0;
+    this.addChild(this._char);
+};
 
 //==============================
 // * Update
@@ -1241,7 +1300,7 @@ MCharStatus.prototype.createLVNumber = function() {
     this._lv_number = [];
 	this._NumberData3 = [this._numberImg3.width / 10,this._numberImg3.height]
 	var x = this._layout.x + Moghunter.scMenu_LVNumberX;
-	var y = this._layout.y + Moghunter.scMenu_LVNumberY;
+	var y = this._layout.y + Moghunter.scMenu_LVNumberY + 4;
 	for (var i = 0; i < 3; i++) {
 		 this._lv_number[i] = new Sprite(this._numberImg3);
 		 this._lv_number[i].visible = false;

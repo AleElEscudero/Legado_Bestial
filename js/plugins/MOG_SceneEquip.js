@@ -117,10 +117,6 @@
 
   　Moghunter.parameters = PluginManager.parameters('MOG_SceneEquip');  
     Moghunter.scEquip_FontSize = Number(Moghunter.parameters['FontSize'] || 20);
-	Moghunter.scEquip_HelpWindowX = Number(Moghunter.parameters['Help X-Axis'] || 0);
-	Moghunter.scEquip_HelpWindowY = Number(Moghunter.parameters['Help Y-Axis'] || 516);	
-	Moghunter.scEquip_HelpLayoutX = Number(Moghunter.parameters['Help Layout X-Axis'] || 0);
-	Moghunter.scEquip_HelpLayoutY = Number(Moghunter.parameters['Help Layout Y-Axis'] || -67);			
 	Moghunter.scEquip_ComWindowX = Number(Moghunter.parameters['Command X-Axis'] || 312);
 	Moghunter.scEquip_ComWindowY = Number(Moghunter.parameters['Command Y-Axis'] || 10);	
 	Moghunter.scEquip_ComLayoutX = Number(Moghunter.parameters['Command Layout X-Axis'] || 15);
@@ -169,9 +165,6 @@ Scene_Equip.prototype.createBackground = function() {
 var _mog_scEquipM_create = Scene_Equip.prototype.create;
 Scene_Equip.prototype.create = function() {
 	_mog_scEquipM_create.call(this);
-	this._helpWindow.x = Moghunter.scEquip_HelpWindowX;
-	this._helpWindow.y = Moghunter.scEquip_HelpWindowY;	
-	this._helpWindowOrg = [this._helpWindow.x,this._helpWindow.y];
 	this._commandWindow.x = Moghunter.scEquip_ComWindowX;
 	this._commandWindow.y = Moghunter.scEquip_ComWindowY;
 	this._commandWindow.contents.fontSize = Moghunter.scEquip_FontSize;	
@@ -181,7 +174,7 @@ Scene_Equip.prototype.create = function() {
 	this._slotWindowOrg = [this._slotWindow.x,this._slotWindow.y];
 	this._itemWindow.x = Moghunter.scEquip_ItemWindowX;
 	this._itemWindow.y = Moghunter.scEquip_ItemWindowY;
-	this._itemWindow.width = this._slotWindow.width
+	this._itemWindow.width = this._slotWindow.width/2;
 	this._itemWindow.height = 230;
 	this._itemWindowOrg = [this._itemWindow.x,this._itemWindow.y];
 	this._statusWindow.x = Moghunter.scEquip_StatusWindowX;
@@ -206,7 +199,6 @@ Scene_Equip.prototype.onActorChange = function() {
 //==============================
 Scene_Equip.prototype.createSprites = function() {
 	this.createLayout();
-	this.createLayoutHelp();
 	this.createLayoutCommand();
 	this.createLayoutSlot();
 	this.createLayoutItem();
@@ -220,15 +212,6 @@ Scene_Equip.prototype.createLayout = function() {
 	this._layout = new Sprite(ImageManager.loadMenusequip("Layout"));
 	this._field.addChild(this._layout);	
 };
-
-//==============================
-// * Create LayoutHelp
-//==============================
-Scene_Equip.prototype.createLayoutHelp = function() {
-	this._layoutHelp = new Sprite(ImageManager.loadMenusequip("LayoutHelp"));
-	this._field.addChild(this._layoutHelp);	
-};
-
 //==============================
 // * Create LayoutCommand
 //==============================
@@ -274,13 +257,10 @@ Scene_Equip.prototype.updateSprites = function() {
 //==============================
 Scene_Equip.prototype.resetPosition = function() {
 	var slide = 100
-	this._helpWindow.y = this._helpWindowOrg[1] + slide;
 	this._commandWindow.y = this._commandWindowOrg[1] - slide;
 	this._slotWindow.x = this._slotWindowOrg[0] + slide;
 	this._itemWindow.x = this._itemWindowOrg[0] + slide + 0;
 	this._statusWindow.x = this._statusWindowOrg[0] - slide - 0;;	
-	this._helpWindow.contentsOpacity = 0;
-	this._helpWindow.contentsOpacity = 0;
 	this._commandWindow.contentsOpacity = 0;
 	this._slotWindow.contentsOpacity = 0;
 	this._itemWindow.contentsOpacity = 0;
@@ -293,16 +273,11 @@ Scene_Equip.prototype.resetPosition = function() {
 Scene_Equip.prototype.updateSlide = function() {
 	var slideSpeed = 5;
 	var opcSpeed = 10;	
-	this._helpWindow.contentsOpacity += opcSpeed;
 	this._commandWindow.contentsOpacity += opcSpeed;
 	this._slotWindow.contentsOpacity += opcSpeed;
 	this._itemWindow.contentsOpacity += opcSpeed;
 	this._statusWindow.contentsOpacity += opcSpeed;	
 	
-    if (this._helpWindow.y > this._helpWindowOrg[1]) {
-		this._helpWindow.y -= slideSpeed;
-		if (this._helpWindow.y < this._helpWindowOrg[1]) {this._helpWindow.y = this._helpWindowOrg[1]};
-	};
     if (this._commandWindow.y < this._commandWindowOrg[1]) {
 		this._commandWindow.y += slideSpeed;
 		if (this._commandWindow.y > this._commandWindowOrg[1]) {this._commandWindow.y = this._commandWindowOrg[1]};
@@ -325,10 +300,6 @@ Scene_Equip.prototype.updateSlide = function() {
 // * update Layout
 //==============================
 Scene_Equip.prototype.updateLayout = function() {
-	this._layoutHelp.x = this._helpWindow.x + Moghunter.scEquip_HelpLayoutX;
-	this._layoutHelp.y = this._helpWindow.y + Moghunter.scEquip_HelpLayoutY;
-	this._layoutHelp.opacity = this._helpWindow.contentsOpacity
-	this._helpWindow.opacity = 0;	
 	this._layoutCommand.x = this._commandWindow.x + Moghunter.scEquip_ComLayoutX;
 	this._layoutCommand.y = this._commandWindow.y + Moghunter.scEquip_ComLayoutY;
 	this._layoutCommand.opacity = this._commandWindow.contentsOpacity;
@@ -364,15 +335,18 @@ Scene_Equip.prototype.update = function() {
 // * Window Equip Item
 //==============================
 Window_EquipSlot.prototype.drawItem = function(index) {
-	this.contents.fontSize = Moghunter.scEquip_FontSize;
+    this.contents.fontSize = Moghunter.scEquip_FontSize;
     if (this._actor) {
         var rect = this.itemRectForText(index);
+        rect.width = rect.width / 2; // Reduce el ancho a la mitad
+        rect.x = rect.x / 2; // Ajusta la posición x para centrar el texto
         this.changeTextColor(this.systemColor());
         this.changePaintOpacity(this.isEnabled(index));
-        this.drawItemName(this._actor.equips()[index], rect.x + 138, rect.y);
+        this.drawItemName(this._actor.equips()[index], rect.x + 64, rect.y, rect.width); // Ajusta la posición x del texto
         this.changePaintOpacity(true);
     }
 };
+
 
 //=============================================================================
 // ** Window Equip Command
@@ -399,16 +373,6 @@ Window_EquipStatus.prototype.initialize = function(x, y) {
 };
 
 //==============================
-// * draw Text
-//==============================
-Window_EquipStatus.prototype.createFaceSprite = function() {
-	this._faceSprite = new Sprite();
-	this._faceSprite.x = 150;
-	this._faceSprite.y = 0;
-	this.addChild(this._faceSprite);
-};
-
-//==============================
 // * refresh
 //==============================
 Window_EquipStatus.prototype.refresh = function() {
@@ -427,10 +391,32 @@ Window_EquipStatus.prototype.refresh = function() {
 };
 
 //==============================
+// * create Face Sprite
+//==============================
+Window_EquipStatus.prototype.createFaceSprite = function() {
+    this._faceSprite = new Sprite();
+    this._faceSprite.x = Moghunter.scItem_ActorFaceX + 10;
+    this._faceSprite.y = Moghunter.scItem_ActorFaceY + 70;
+    this._faceSprite.scale.x = 0.5; // Escala 50%
+    this._faceSprite.scale.y = 0.5; // Escala 50%
+    this.addChild(this._faceSprite);
+};
+
+//==============================
 // * refresh Face Sprite
 //==============================
 Window_EquipStatus.prototype.refreshFaceSprite = function() {
-	 this._faceSprite.bitmap = ImageManager.loadMenusFaces1("Actor_" + this._actor._actorId);
+    var faceName = this._actor.faceName();
+    var faceIndex = this._actor.faceIndex();
+    
+    this._faceSprite.bitmap = ImageManager.loadFace(faceName);
+
+    var pw = Window_Base._faceWidth;
+    var ph = Window_Base._faceHeight;
+    var sx = faceIndex % 4 * pw;
+    var sy = Math.floor(faceIndex / 4) * ph;
+
+    this._faceSprite.setFrame(sx, sy, pw, ph);
 };
 
 //==============================
