@@ -198,45 +198,70 @@
  * @desc Definição Y-Axis do medidor de LUK.
  * @default 322
  * 
- * @param Weapon X-Axis
- * @desc Definição X-Axis da arma.
- * @default 7
- *
- * @param Weapon Y-Axis
- * @desc Definição Y-Axis do arma.
- * @default 347
- *		
- * @param Shield X-Axis
- * @desc Definição X-Axis do escudo.
- * @default 7
- *
- * @param Shield Y-Axis
- * @desc Definição Y-Axis do escudo.
- * @default 398
- *		
- * @param Helmet X-Axis
- * @desc Definição X-Axis do capacete.
- * @default 7
- *
- * @param Helmet Y-Axis
- * @desc Definição Y-Axis do capacete.
- * @default 449
- *	
- * @param Armor X-Axis
- * @desc Definição X-Axis da armadura.
- * @default 261
- *
- * @param Armor Y-Axis
- * @desc Definição Y-Axis da armadura.
- * @default 376
- *	
- * @param Accessory X-Axis
- * @desc Definição X-Axis do acessório.
- * @default 261
- *
- * @param Accessory Y-Axis
- * @desc Definição Y-Axis do acessório.
- * @default 427
+ * @param ArmaX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param ArmaY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param AccesorioX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param AccesorioY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param Pi_VinculanteX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param Pi_VinculanteY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param CascoX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param CascoY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param PetoX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param PetoY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param PantalonesX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param PantalonesY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param GuantesX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param GuantesY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param BotasX
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
+ * @param BotasY
+ * @desc Definição Y-Axis do medidor de LUK.
+ * @default 322
+
  *	
  * @param Class X-Axis
  * @desc Definição X-Axis da classe.
@@ -328,14 +353,24 @@
 	Moghunter.scStatus_LUKNumberY = Number(Moghunter.parameters['LUK Number Y-Axis'] || 267);
 	Moghunter.scStatus_MeterLUKX = Number(Moghunter.parameters['LUK Meter X-Axis'] || 361);
 	Moghunter.scStatus_MeterLUKY = Number(Moghunter.parameters['LUK Meter Y-Axis'] || 322);		
-	Moghunter.scStatus_WeaponX = Number(Moghunter.parameters['Weapon X-Axis'] || 7);
-	Moghunter.scStatus_WeaponY = Number(Moghunter.parameters['Weapon Y-Axis'] || 347);
-	Moghunter.scStatus_ShieldX = Number(Moghunter.parameters['Shield X-Axis'] || 7);
-	Moghunter.scStatus_ShieldY = Number(Moghunter.parameters['Shield Y-Axis'] || 398);	
-	Moghunter.scStatus_HelmetX = Number(Moghunter.parameters['Helmet X-Axis'] || 7);
-	Moghunter.scStatus_HelmetY = Number(Moghunter.parameters['Helmet Y-Axis'] || 449);	
-	Moghunter.scStatus_ArmorX = Number(Moghunter.parameters['Armor X-Axis'] || 261);
-	Moghunter.scStatus_ArmorY = Number(Moghunter.parameters['Armor Y-Axis'] || 376);	
+
+	Moghunter.ArmaX = Number(Moghunter.parameters['ArmaX'] || 7);
+	Moghunter.ArmaY = Number(Moghunter.parameters['ArmaY'] || 347);
+	Moghunter.AccesorioX = Number(Moghunter.parameters['AccesorioX'] || 7);
+	Moghunter.AccesorioY = Number(Moghunter.parameters['AccesorioY'] || 347);
+	Moghunter.Pi_VinculanteX = Number(Moghunter.parameters['Pi_VinculanteX'] || 7);
+	Moghunter.Pi_VinculanteY = Number(Moghunter.parameters['Pi_VinculanteY'] || 347);
+	Moghunter.CascoX = Number(Moghunter.parameters['CascoX'] || 7);
+	Moghunter.CascoY = Number(Moghunter.parameters['CascoY'] || 347);
+	Moghunter.PetoX = Number(Moghunter.parameters['PetoX'] || 7);
+	Moghunter.PetoY = Number(Moghunter.parameters['PetoY'] || 347);
+	Moghunter.PantalonesX = Number(Moghunter.parameters['PantalonesX'] || 7);
+	Moghunter.PantalonesY = Number(Moghunter.parameters['PantalonesY'] || 347);
+	Moghunter.GuantesX = Number(Moghunter.parameters['GuantesX'] || 7);
+	Moghunter.GuantesY = Number(Moghunter.parameters['GuantesY'] || 347);
+	Moghunter.BotasX = Number(Moghunter.parameters['BotasX'] || 7);
+	Moghunter.BotasY = Number(Moghunter.parameters['BotasY'] || 347);
+
 	Moghunter.scStatus_AccX = Number(Moghunter.parameters['Accessory X-Axis'] || 261);
 	Moghunter.scStatus_AccY = Number(Moghunter.parameters['Accessory Y-Axis'] || 427);
 	Moghunter.scStatus_ClassX = Number(Moghunter.parameters['Class X-Axis'] || 260);
@@ -486,21 +521,37 @@ Scene_Status.prototype.createLayout = function() {
 // * Create Bust
 //==============================
 Scene_Status.prototype.createBust = function() {
-	this._bust = new Sprite();
-	this._bust.anchor.x = 0.5;
-	this._bust.x = Moghunter.scStatus_BustX;
-	this._bust.y = Moghunter.scStatus_BustY;
-	this._bust.org = [this._bust.x,this._bust.y]
-	this._field.addChild(this._bust);
+    this._bust = new Sprite();
+    this._bust.anchor.x = 0.5;
+    this._bust.x = Moghunter.scStatus_BustX;
+    this._bust.y = Moghunter.scStatus_BustY;
+    this._bust.org = [this._bust.x, this._bust.y];
+	this.addChild(this._bust);
 };
 
 //==============================
 // * refresh Bust
 //==============================
 Scene_Status.prototype.refreshBust = function() {
-     this._bust.bitmap = ImageManager.loadMenusFaces4("Actor_" + this._actor._actorId);
-	 this._bust.y = Graphics.boxHeight;
-	 this._bust.opacity = 0;
+    var faceName = this._actor.faceName();
+    var faceIndex = this._actor.faceIndex();
+
+    // Calcular la posición de la cara en la hoja de sprites (face set)
+    var pw = Window_Base._faceWidth;
+    var ph = Window_Base._faceHeight;
+    var sx = faceIndex % 4 * pw;
+    var sy = Math.floor(faceIndex / 4) * ph;
+    
+    // Cargar la cara por defecto del sistema y recortar la parte correspondiente
+    var bitmap = ImageManager.loadFace(faceName);
+    var bustBitmap = new Bitmap(pw, ph);
+    bustBitmap.blt(bitmap, sx, sy, pw, ph, 0, 0);
+
+    // Asignar la cara recortada al sprite del busto
+    this._bust.bitmap = bustBitmap;
+
+    this._bust.y = Graphics.boxHeight; // Ajustar la posición Y si es necesario
+    this._bust.opacity = 0; // Ajustar la opacidad si es necesario
 };
 
 //==============================
@@ -548,30 +599,100 @@ Scene_Status.prototype.update = function() {
 Window_Status.prototype.refresh = function() {
     this.contents.clear();
     if (this._actor) {
-		this.contents.fontSize = 24;
-        this.drawText(this._actor.name(), Moghunter.scStatus_ActorNameX, Moghunter.scStatus_ActorNameY,120,"center");
-		this.drawText(this._actor.level, Moghunter.scStatus_LevelX, Moghunter.scStatus_LevelY,100,"center");	
-		this.drawText(this._actor.currentExp(), Moghunter.scStatus_ExpX, Moghunter.scStatus_ExpY,100,"center");
-	    var nexp = this._actor.nextRequiredExp();
-        if (this._actor.isMaxLevel()) {nexp = '-------'};	
-		this.drawText(nexp, Moghunter.scStatus_NExpX, Moghunter.scStatus_NExpY,100,"center");	
-		this.contents.fontSize = 22;
-		this.drawText(this._actor.hp + " / " + this._actor.mhp, Moghunter.scStatus_HPNumberX, Moghunter.scStatus_HPNumberY,100,"right");
-		this.drawText(this._actor.mp + " / " + this._actor.mmp, Moghunter.scStatus_MPNumberX , Moghunter.scStatus_MPNumberY,100,"right");
-		this.drawText(this._actor.tp, Moghunter.scStatus_TPNumberX, Moghunter.scStatus_TPNumberY,100,"right");
-		this.drawText(this._actor.atk, Moghunter.scStatus_ATKNumberX, Moghunter.scStatus_ATKNumberY,100,"right");
-		this.drawText(this._actor.mat, Moghunter.scStatus_MATNumberX, Moghunter.scStatus_MATNumberY,100,"right");
-		this.drawText(this._actor.agi, Moghunter.scStatus_AGINumberX, Moghunter.scStatus_AGINumberY,100,"right");
-		this.drawText(this._actor.def, Moghunter.scStatus_DEFNumberX, Moghunter.scStatus_DEFNumberY,100,"right");
-		this.drawText(this._actor.mdf, Moghunter.scStatus_MDFNumberX, Moghunter.scStatus_MDFNumberY,100,"right");
-		this.drawText(this._actor.luk, Moghunter.scStatus_LUKNumberX, Moghunter.scStatus_LUKNumberY,100,"right");		
-		this.drawItemName(this._actor.equips()[0], Moghunter.scStatus_WeaponX , Moghunter.scStatus_WeaponY);
-		this.drawItemName(this._actor.equips()[1], Moghunter.scStatus_ShieldX, Moghunter.scStatus_ShieldY);
-		this.drawItemName(this._actor.equips()[2], Moghunter.scStatus_HelmetX, Moghunter.scStatus_HelmetY);
-		this.drawItemName(this._actor.equips()[3], Moghunter.scStatus_ArmorX, Moghunter.scStatus_ArmorY);
-		this.drawItemName(this._actor.equips()[4], Moghunter.scStatus_AccX, Moghunter.scStatus_AccY);
-		this.drawActorClass(this._actor, Moghunter.scStatus_ClassX, Moghunter.scStatus_ClassY);
-		this.drawTextEx(this._actor.profile(), Moghunter.scStatus_ProfileX, Moghunter.scStatus_ProfileY);	
+        this.contents.fontSize = 24;
+
+        // Nombres de los campos
+        const fieldNames = {
+            level: "Nivel",
+            exp: "Exp",
+            nextExp: "Siguiente nivel",
+            hp: "PV",
+            mp: "E",
+            tp: "PT",
+            atk: "ATK",
+            mat: "MAT",
+            agi: "AGI",
+            def: "DEF",
+            mdf: "MDF",
+            luk: "SU",
+            equips: ["Arma", "Accesorio", "Pi. Vinculante", "Casco", "Peto", "Pantalones", "Guantes", "Botas"],
+            class: "Clase:",
+            profile: "Perfil"
+        };
+
+        // Dibujar nombres de campos y valores
+        this.drawText(this._actor.name(), Moghunter.scStatus_ActorNameX, Moghunter.scStatus_ActorNameY, 120, "center");
+
+        this.drawText(fieldNames.level, Moghunter.scStatus_LevelX - 80, Moghunter.scStatus_LevelY, 120, "left");
+        this.drawText(this._actor.level, Moghunter.scStatus_LevelX, Moghunter.scStatus_LevelY, 100, "center");
+
+        this.drawText(fieldNames.exp, Moghunter.scStatus_ExpX - 80, Moghunter.scStatus_ExpY, 120, "left");
+        this.drawText(this._actor.currentExp(), Moghunter.scStatus_ExpX, Moghunter.scStatus_ExpY, 100, "center");
+
+        var nexp = this._actor.nextRequiredExp();
+        if (this._actor.isMaxLevel()) { nexp = '-------' };
+        this.drawText(fieldNames.nextExp, Moghunter.scStatus_NExpX - 120, Moghunter.scStatus_NExpY, 120, "left");
+        this.drawText(nexp, Moghunter.scStatus_NExpX, Moghunter.scStatus_NExpY, 100, "center");
+
+        this.contents.fontSize = 22;
+
+        this.drawText(fieldNames.hp, Moghunter.scStatus_HPNumberX - 50, Moghunter.scStatus_HPNumberY, 120, "left");
+        this.drawText(this._actor.hp + " / " + this._actor.mhp, Moghunter.scStatus_HPNumberX, Moghunter.scStatus_HPNumberY, 100, "right");
+
+        this.drawText(fieldNames.mp, Moghunter.scStatus_MPNumberX - 50, Moghunter.scStatus_MPNumberY, 120, "left");
+        this.drawText(this._actor.mp + " / " + this._actor.mmp, Moghunter.scStatus_MPNumberX, Moghunter.scStatus_MPNumberY, 100, "right");
+
+        this.drawText(fieldNames.tp, Moghunter.scStatus_TPNumberX - 50, Moghunter.scStatus_TPNumberY, 120, "left");
+        this.drawText(this._actor.tp, Moghunter.scStatus_TPNumberX, Moghunter.scStatus_TPNumberY, 100, "right");
+
+        this.drawText(fieldNames.atk, Moghunter.scStatus_ATKNumberX - 50, Moghunter.scStatus_ATKNumberY, 120, "left");
+        this.drawText(this._actor.atk, Moghunter.scStatus_ATKNumberX, Moghunter.scStatus_ATKNumberY, 100, "right");
+
+        this.drawText(fieldNames.mat, Moghunter.scStatus_MATNumberX - 50, Moghunter.scStatus_MATNumberY, 120, "left");
+        this.drawText(this._actor.mat, Moghunter.scStatus_MATNumberX, Moghunter.scStatus_MATNumberY, 100, "right");
+
+        this.drawText(fieldNames.agi, Moghunter.scStatus_AGINumberX - 50, Moghunter.scStatus_AGINumberY, 120, "left");
+        this.drawText(this._actor.agi, Moghunter.scStatus_AGINumberX, Moghunter.scStatus_AGINumberY, 100, "right");
+
+        this.drawText(fieldNames.def, Moghunter.scStatus_DEFNumberX - 50, Moghunter.scStatus_DEFNumberY, 120, "left");
+        this.drawText(this._actor.def, Moghunter.scStatus_DEFNumberX, Moghunter.scStatus_DEFNumberY, 100, "right");
+
+        this.drawText(fieldNames.mdf, Moghunter.scStatus_MDFNumberX - 50, Moghunter.scStatus_MDFNumberY, 120, "left");
+        this.drawText(this._actor.mdf, Moghunter.scStatus_MDFNumberX, Moghunter.scStatus_MDFNumberY, 100, "right");
+
+        this.drawText(fieldNames.luk, Moghunter.scStatus_LUKNumberX - 50, Moghunter.scStatus_LUKNumberY, 120, "left");
+        this.drawText(this._actor.luk, Moghunter.scStatus_LUKNumberX, Moghunter.scStatus_LUKNumberY, 100, "right");
+
+        // Dibujar nombres de equipos y equipos
+        
+		this.drawText(fieldNames.equips[0], Moghunter.ArmaX, Moghunter.ArmaY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[0], Moghunter.ArmaX, Moghunter.ArmaY);
+
+        this.drawText(fieldNames.equips[1], Moghunter.AccesorioX, Moghunter.AccesorioY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[1], Moghunter.AccesorioX, Moghunter.AccesorioY);
+
+        this.drawText(fieldNames.equips[2], Moghunter.Pi_VinculanteX, Moghunter.Pi_VinculanteY - 30, 120, "left");
+        this.drawItemName(this._actor.equips()[2], Moghunter.Pi_VinculanteX, Moghunter.Pi_VinculanteY);
+
+        this.drawText(fieldNames.equips[3], Moghunter.CascoX, Moghunter.CascoY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[3], Moghunter.CascoX, Moghunter.CascoY);
+
+        this.drawText(fieldNames.equips[4], Moghunter.PetoX, Moghunter.PetoY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[4], Moghunter.PetoX, Moghunter.PetoY);
+
+        this.drawText(fieldNames.equips[5], Moghunter.PantalonesX, Moghunter.PantalonesY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[5], Moghunter.PantalonesX, Moghunter.PantalonesY);
+
+        this.drawText(fieldNames.equips[6], Moghunter.GuantesX, Moghunter.GuantesY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[6], Moghunter.GuantesX, Moghunter.GuantesY);
+
+        this.drawText(fieldNames.equips[7], Moghunter.BotasX, Moghunter.BotasY - 35, 120, "left");
+        this.drawItemName(this._actor.equips()[7], Moghunter.BotasX, Moghunter.BotasY);
+
+        this.drawText(fieldNames.class, Moghunter.scStatus_ClassX, Moghunter.scStatus_ClassY -25, 120, "left");
+        this.drawActorClass(this._actor, Moghunter.scStatus_ClassX, Moghunter.scStatus_ClassY);
+
+        this.drawTextEx(this._actor.profile(), Moghunter.scStatus_ProfileX, Moghunter.scStatus_ProfileY);
     };
 };
 
