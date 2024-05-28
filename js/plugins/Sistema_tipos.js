@@ -30,7 +30,7 @@
 (function() {
     const parameters = PluginManager.parameters('TypeSystem');
     const typeEffects = JSON.parse(parameters['TypeEffects']).map(effect => JSON.parse(effect));
-
+console.log("json", parameters);
     // Sobrescribimos el método elementRate para incluir nuestra lógica de tipos.
     Game_BattlerBase.prototype.elementRate = function(elementId) {
         const baseRate = this.traitsPi(Game_BattlerBase.TRAIT_ELEMENT_RATE, elementId);
