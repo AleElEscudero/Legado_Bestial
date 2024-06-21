@@ -1306,8 +1306,8 @@ Game_System.prototype.allow_tint_screen = function() {
 //==============================
 Game_System.prototype.set_day_phase = function() {
 	if (this.hour() >= 21 || this.hour() < 3) {this._time_data[1] = 3} // Night
-	else if (this.hour() >= 18) {this._time_data[1] = 2} //Dusk
-	else if (this.hour() >= 15) {this._time_data[1] = 0} // Sunset
+	else if (this.hour() >= 19) {this._time_data[1] = 2} //Dusk
+	else if (this.hour() >= 17) {this._time_data[1] = 0} // Sunset
 	else if (this.hour() >= 9) {this._time_data[1] = 1} // Normal
 	else if (this.hour() >= 6) {this._time_data[1] = 5} // Sunrise
 	else if (this.hour() >= 3) {this._time_data[1] = 4} // Dawn
